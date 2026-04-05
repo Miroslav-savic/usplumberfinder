@@ -44,6 +44,13 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPN5K3SNRM" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-TPN5K3SNRM');
+        `}} />
       </head>
       <body>
         {children}
