@@ -1,4 +1,9 @@
-const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001") + "/api";
+// Server-side: use internal URL directly (bypasses nginx)
+// Client-side: use public URL through nginx
+const INTERNAL = process.env.API_INTERNAL_URL || "http://localhost:4001";
+const BASE = (typeof window === "undefined"
+  ? INTERNAL
+  : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001")) + "/api";
 export const MEDIA = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001";
 
 export function imgUrl(path) {
@@ -24,7 +29,7 @@ export async function login(email, password) {
 
 // Posts — public (cache: no-store for always-fresh SSR)
 export async function getPublicPosts() {
-  const res = await fetch(`${BASE}/posts/public`, { next: { revalidate: 300 } });
+  const res = await fetch(`${BASE}/posts/public`, { cache: "no-store" });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message);
   return data;

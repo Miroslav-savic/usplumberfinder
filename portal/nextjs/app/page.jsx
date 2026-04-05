@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { extractCity } from "@/lib/extractCity";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Plumber Finder — Find Plumbers Near You",
   description: "Search and find licensed plumbers, plumbing contractors, and emergency plumbing services near you across the United States.",
