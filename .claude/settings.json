@@ -34,7 +34,22 @@
       "Bash(rm -rf /home/miroslav/PROJECTS/nodejs/plumber/portal/.git)",
       "Bash(git commit -m ':*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(mongodump --db plumbers --out /tmp/plumbers-dump)",
+      "Bash(tar -czf /tmp/plumbers-uploads.tar.gz -C /home/miroslav/PROJECTS/nodejs/plumber/portal/backend uploads/)",
+      "Bash(scp -o StrictHostKeyChecking=no /tmp/plumbers-dump.tar.gz root@srv1463329.hstgr.cloud:/tmp/)",
+      "Bash(tar -czf /tmp/plumbers-dump.tar.gz /tmp/plumbers-dump/)",
+      "Bash(scp -o StrictHostKeyChecking=no /tmp/plumbers-uploads.tar.gz root@srv1463329.hstgr.cloud:/tmp/)",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud ':*)",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"pm2 restart plumberfinder-api && pm2 restart plumberfinder-next && pm2 list\")",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"pm2 delete 8 && pm2 save\")",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"cat /var/www/usplumberfinder/portal/backend/.env\")",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"mongosh plumbers --eval 'db.posts.countDocuments\\(\\)' --quiet\")",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"pm2 logs plumberfinder-api --lines 20 --nostream 2>&1\")",
+      "Bash(ssh -o StrictHostKeyChecking=no root@srv1463329.hstgr.cloud \"cat /var/www/usplumberfinder/portal/nextjs/.env.local 2>/dev/null || echo 'nema .env.local'\")",
+      "Bash(ssh -o:*)",
+      "Bash(sed -i 's|http://localhost:3001|http://localhost:4001|g' /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/lib/api.js)",
+      "Bash(sed -i 's|http://localhost:3004|http://localhost:4000|g' /home/miroslav/PROJECTS/nodejs/plumber/portal/backend/src/server.js)"
     ],
     "additionalDirectories": [
       "/home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/plumbers/[city]",

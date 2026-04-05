@@ -13,7 +13,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3004",
+  "http://localhost:4000",
   "http://srv1463329.hstgr.cloud",
   "https://usplumberfinder.com",
   "https://www.usplumberfinder.com",
