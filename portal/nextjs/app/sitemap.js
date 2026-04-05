@@ -1,6 +1,8 @@
 import { getPublicPosts } from "@/lib/api";
 import { extractCity } from "@/lib/extractCity";
 
+export const dynamic = "force-dynamic";
+
 const SITE = "https://usplumberfinder.com";
 
 function citySlug(name) {
