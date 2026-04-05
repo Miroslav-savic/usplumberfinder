@@ -1,0 +1,107 @@
+.map-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.map-search-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.map-search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.map-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.map-search-input {
+  width: 100%;
+  padding: 0.55rem 2.2rem 0.55rem 2.3rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.map-search-input:focus { border-color: #2563eb; }
+
+.map-clear-btn {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.2rem;
+  line-height: 1;
+}
+.map-clear-btn:hover { color: #475569; }
+
+.map-search-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.map-search-btn:hover { background: #1d4ed8; }
+.map-search-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.map-error-msg {
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+
+.map-picker-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  cursor: crosshair;
+}
+
+.map-hint {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.55);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.map-coords {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-family: monospace;
+}
+.map-coords svg { color: #2563eb; flex-shrink: 0; }

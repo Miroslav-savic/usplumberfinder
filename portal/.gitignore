@@ -1,0 +1,11 @@
+backend/node_modules/
+backend/.env
+backend/uploads/
+backend/.claude/
+
+nextjs/node_modules/
+nextjs/.next/
+nextjs/.env.local
+
+frontend/node_modules/
+frontend/dist/

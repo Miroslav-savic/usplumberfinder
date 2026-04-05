@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs sed:*)",
+      "Bash(ls /home/miroslav/PROJECTS/nodejs/plumber/portal/backend/*.js)",
+      "Bash(xargs basename:*)",
+      "Bash(grep -r \"clinic\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/components/*.css)",
+      "Read(//home/miroslav/PROJECTS/nodejs/hospitals/**)",
+      "Bash(grep -n \"Post.exists\\({ companyName\" /home/miroslav/PROJECTS/nodejs/plumber/portal/backend/seed-plumbers-*.js)",
+      "Bash(python3 -)",
+      "Bash(node -e \"require\\('sharp'\\) && console.log\\('sharp ok'\\)\")",
+      "Bash(python3 -c \"import cairosvg\")",
+      "Bash(python3 -c \"from PIL import Image\")",
+      "Bash(cp /tmp/icon.png /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/icon.png)",
+      "Bash(cp /tmp/favicon.ico /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/public/favicon.ico)",
+      "Bash(cp /tmp/icon-192.png /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/public/icon-192.png)",
+      "Bash(python3 -c \"import cairosvg; print\\('cairosvg ok'\\)\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL ok'\\)\")",
+      "Bash(python3)",
+      "Bash(pip install:*)",
+      "Bash(python3 -c \"import cairosvg; print\\('ok'\\)\")",
+      "Bash(sed -i \"s|/clinics/\\\\${citySlug\\(city\\)}|/plumbers/\\\\${citySlug\\(city\\)}|g\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/page.jsx)",
+      "Bash(sed -i \"s|/clinics/\\\\${citySlug\\(c\\)}|/plumbers/\\\\${citySlug\\(c\\)}|g\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/components/CityBrowse.jsx)",
+      "Bash(sed -i \"s|Browse clinics by city|Browse plumbers by city|g\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/components/CityBrowse.jsx)",
+      "Bash(sed -i \"s|Search clinics, specialties, cities|Search plumbers, services, cities|g\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/components/SearchDropdown.jsx)",
+      "Bash(sed -i \"s|related-clinics|related-plumbers|g\" /home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/post/\\\\[slug\\\\]/page.jsx)",
+      "Bash(node seed-plumbers-sf.js)",
+      "Bash(node seed-plumbers-cleveland.js)",
+      "Bash(git init:*)",
+      "Bash(git remote:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)"
+    ],
+    "additionalDirectories": [
+      "/home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/plumbers/[city]"
+    ]
+  }
+}
