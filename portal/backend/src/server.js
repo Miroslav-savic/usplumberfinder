@@ -13,12 +13,10 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3002",
+  "http://localhost:3004",
   "http://srv1463329.hstgr.cloud",
-  "https://eprivrednik.com",
-  "https://www.eprivrednik.com",
-  "https://usclinicfinder.com",
-  "https://www.usclinicfinder.com",
+  "https://usplumberfinder.com",
+  "https://www.usplumberfinder.com",
 ];
 
 app.use(cors({ origin: allowedOrigins }));

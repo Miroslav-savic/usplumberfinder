@@ -29,10 +29,16 @@
       "Bash(git init:*)",
       "Bash(git remote:*)",
       "Bash(git branch:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(rm -rf /home/miroslav/PROJECTS/nodejs/plumber/portal/.git)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ],
     "additionalDirectories": [
-      "/home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/plumbers/[city]"
+      "/home/miroslav/PROJECTS/nodejs/plumber/portal/nextjs/app/plumbers/[city]",
+      "/home/miroslav/PROJECTS/nodejs/plumber/portal/.git"
     ]
   }
 }

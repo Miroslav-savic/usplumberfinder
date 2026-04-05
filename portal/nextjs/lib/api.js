@@ -1,5 +1,5 @@
-const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000") + "/api";
-export const MEDIA = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001") + "/api";
+export const MEDIA = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export function imgUrl(path) {
   if (!path) return "";
