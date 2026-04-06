@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { likePost, imgUrl } from "@/lib/api";
+import { imgUrl } from "@/lib/api";
 
 
 const PER_PAGE = 10;
@@ -11,14 +11,6 @@ const SPECIALTIES = [
   "Backflow","Sump Pump","Toilet Repair","Faucet & Fixture","Water Softener",
 ];
 
-function getLiked() {
-  try { return JSON.parse(localStorage.getItem("liked") || "{}"); } catch { return {}; }
-}
-function saveLiked(id) {
-  const liked = getLiked();
-  liked[id] = true;
-  localStorage.setItem("liked", JSON.stringify(liked));
-}
 
 const NYC_NEIGHBORHOODS = new Set([
   "jamaica","flushing","astoria","ridgewood","bayside","forest hills",
@@ -170,10 +162,6 @@ export default function PortalPosts({ initialPosts }) {
   const [userLocation, setUserLocation] = useState(null);
   const [locLoading, setLocLoading] = useState(false);
   const cachedLocRef = useRef(null);
-  const [liked, setLiked] = useState(() => {
-    if (typeof window === "undefined") return {};
-    return getLiked();
-  });
   const [copiedId, setCopiedId] = useState(null);
   const [mapPost, setMapPost] = useState(null);
 
@@ -278,16 +266,6 @@ export default function PortalPosts({ initialPosts }) {
       () => setLocLoading(false)
     );
   }, [userLocation]);
-
-  async function handleLike(e, postId) {
-    e.stopPropagation();
-    e.preventDefault();
-    if (liked[postId]) return;
-    const { likes } = await likePost(postId);
-    setLiked((prev) => ({ ...prev, [postId]: true }));
-    saveLiked(postId);
-    setPosts((prev) => prev.map((p) => p._id === postId ? { ...p, likes } : p));
-  }
 
   return (
     <>
@@ -469,7 +447,7 @@ export default function PortalPosts({ initialPosts }) {
                   </div>
                   <div className="post-card-meta">
                     <div className="post-meta-left">
-                      {post.reviewCount > 0 && (
+                      {post.rating && (
                         <StarRating rating={post.rating} count={post.reviewCount} />
                       )}
                       {extractCity(post.address) && (
@@ -489,16 +467,6 @@ export default function PortalPosts({ initialPosts }) {
                         </svg>
                         {post.viewCount}
                       </span>
-                      <button
-                        className={`like-btn ${liked[post._id] ? "like-btn-active" : ""}`}
-                        onClick={(e) => { e.preventDefault(); handleLike(e, post._id); }}
-                        title={liked[post._id] ? "Already liked" : "Like"}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill={liked[post._id] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
-                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                        {post.likes || 0}
-                      </button>
                       <span className="post-card-read-more">Click for details →</span>
                     </div>
                   </div>
