@@ -459,7 +459,12 @@ export default function PortalPosts({ initialPosts }) {
                   <span className="post-company">{post.companyName}</span>
                   <h2 className="post-card-title">{post.title}</h2>
                   <p className="post-card-excerpt">
-                    {post.content.slice(0, 250).replace(/\s\S*$/, "") + "…"}
+                    {(() => {
+                      const city = extractCity(post.address);
+                      const specs = (post.specialties || []).join(", ");
+                      const rating = post.rating > 0 ? ` Rated ${post.rating.toFixed(1)}★ (${post.reviewCount} reviews).` : "";
+                      return `${post.companyName} offers ${specs || "plumbing services"} in ${city || "your area"}.${rating} Licensed & insured professionals, fast response times.`;
+                    })()}
                   </p>
                   <div className="post-card-actions">
                     {post.phone ? (
