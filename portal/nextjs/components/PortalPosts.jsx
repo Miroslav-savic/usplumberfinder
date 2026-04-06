@@ -426,48 +426,51 @@ export default function PortalPosts({ initialPosts }) {
                     {post.content.slice(0, 250).replace(/\s\S*$/, "") + "…"}
                   </p>
                   <div className="post-card-actions">
-                    {post.phone && (
-                      <span
-                        className="post-card-phone"
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `tel:${post.phone}`; }}
-                      >
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                        </svg>
-                        {post.phone}
-                      </span>
-                    )}
-                    {post.phone && (
-                      <button
-                        className={`post-card-action-btn ${copiedId === post._id ? "post-card-action-btn--copied" : ""}`}
-                        onClick={(e) => handleCopy(e, post.phone, post._id)}
-                        title="Copy phone number"
-                      >
-                        {copiedId === post._id ? (
-                          <>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                              <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Copied!
-                          </>
-                        ) : (
+                    {post.phone ? (
+                      <div className="post-card-phone-row">
+                        <span
+                          className="post-card-call-btn"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `tel:${post.phone}`; }}
+                        >
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                           </svg>
+                          Call Now! <span className="post-card-phone-num">{post.phone}</span>
+                        </span>
+                        <button
+                          className={`post-card-action-btn ${copiedId === post._id ? "post-card-action-btn--copied" : ""}`}
+                          onClick={(e) => handleCopy(e, post.phone, post._id)}
+                          title="Copy phone number"
+                        >
+                          {copiedId === post._id ? (
+                            <><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>Copied!</>
+                          ) : (
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                          )}
+                        </button>
+                        {(post.lat || post.address) && (
+                          <button className="post-card-action-btn post-card-action-btn--map" onClick={(e) => handleMapOpen(e, post)} title="Show on map">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                            </svg>
+                          </button>
                         )}
-                      </button>
-                    )}
-                    {(post.lat || post.address) && (
-                      <button
-                        className="post-card-action-btn post-card-action-btn--map"
-                        onClick={(e) => handleMapOpen(e, post)}
-                        title="Show on map"
-                      >
+                      </div>
+                    ) : (post.lat || post.address) ? (
+                      <button className="post-card-action-btn post-card-action-btn--map" onClick={(e) => handleMapOpen(e, post)} title="Show on map">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
                         </svg>
                       </button>
-                    )}
+                    ) : null}
+                  </div>
+                  <div className="post-card-details-hint">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    Click for details
                   </div>
                   <div className="post-card-meta">
                     <div className="post-meta-left">
