@@ -162,9 +162,19 @@ export default function HeroSlider() {
       </div>
       <div className="hero-overlay" />
       <div className="hero-content">
-        <span className="hero-tag">Any Service</span>
-        <h2 className="hero-title">Search by Service or Location</h2>
-        <p className="hero-subtitle">Find the right plumber near you — filter by service, city, or distance across the United States.</p>
+        <span className="hero-tag">10,000+ Plumbers Listed</span>
+        <h2 className="hero-title">Find Trusted Plumbers Near You in Seconds</h2>
+        <p className="hero-subtitle">Compare prices, reviews, and availability across the US. Licensed professionals, fast response.</p>
+        <div className="hero-social-proof">
+          <div className="hero-stars">
+            {[1,2,3,4,5].map(i => (
+              <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            ))}
+          </div>
+          <span className="hero-proof-text">Trusted by homeowners across 20+ cities</span>
+        </div>
         <form className="hero-search-form" onSubmit={handleSearch}>
           <div className="hero-search-inner" ref={wrapRef} style={{ position: "relative" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="hero-search-icon">
