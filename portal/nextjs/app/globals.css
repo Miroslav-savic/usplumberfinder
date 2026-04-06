@@ -547,6 +547,7 @@ html { overflow-x: clip; }
   display: inline-flex; align-items: center; gap: 0.35rem;
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
   padding: 0.22rem 0.65rem; border-radius: 99px; margin-bottom: 0.45rem;
+  align-self: flex-start; width: fit-content;
 }
 .post-avail--allday { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
 .post-avail--open   { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
