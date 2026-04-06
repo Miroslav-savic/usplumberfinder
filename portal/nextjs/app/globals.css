@@ -542,6 +542,26 @@ html { overflow-x: clip; }
   border-radius: 99px; backdrop-filter: blur(4px);
 }
 
+/* ── Availability badge ── */
+.post-avail {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+  padding: 0.22rem 0.65rem; border-radius: 99px; margin-bottom: 0.45rem;
+}
+.post-avail--allday { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.post-avail--open   { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.post-avail--closed { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
+.post-avail-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.post-avail--allday .post-avail-dot,
+.post-avail--open   .post-avail-dot { background: #22c55e; box-shadow: 0 0 0 2px #bbf7d0; animation: avail-pulse 1.8s ease-in-out infinite; }
+.post-avail--closed .post-avail-dot { background: #cbd5e1; }
+@keyframes avail-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
 /* ── Star rating (cards) ── */
 .star-rating {
   display: inline-flex; align-items: center; gap: 0.15rem;

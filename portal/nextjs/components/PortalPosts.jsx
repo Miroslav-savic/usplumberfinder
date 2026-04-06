@@ -105,6 +105,30 @@ function StarRating({ rating, count }) {
 }
 
 
+function getAvailability(workingHours) {
+  if (!workingHours) return null;
+  if (workingHours.includes("Open 24h")) return { label: "24/7 Service", type: "allday" };
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const now = new Date();
+  const dayName = days[now.getDay()];
+  const match = workingHours.match(new RegExp(dayName + ":\\s*([\\d:]+(?:AM|PM))–([\\d:]+(?:AM|PM))"));
+  if (!match) return null;
+  function toMins(t) {
+    const [time, period] = [t.slice(0, -2), t.slice(-2)];
+    let [h, m] = time.split(":").map(Number);
+    if (!m) m = 0;
+    if (period === "PM" && h !== 12) h += 12;
+    if (period === "AM" && h === 12) h = 0;
+    return h * 60 + m;
+  }
+  const cur = now.getHours() * 60 + now.getMinutes();
+  const open = toMins(match[1]);
+  const close = toMins(match[2]);
+  return cur >= open && cur < close
+    ? { label: "Open Now", type: "open" }
+    : { label: "Closed", type: "closed" };
+}
+
 function SpecialtyToggle({ specialty, onSelect }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -445,6 +469,12 @@ export default function PortalPosts({ initialPosts }) {
                       </button>
                     ) : null}
                   </div>
+                  {(() => { const av = getAvailability(post.workingHours); return av ? (
+                    <div className={`post-avail post-avail--${av.type}`}>
+                      <span className="post-avail-dot" />
+                      {av.label}
+                    </div>
+                  ) : null; })()}
                   <div className="post-card-meta">
                     <div className="post-meta-left">
                       {extractCity(post.address) && (
