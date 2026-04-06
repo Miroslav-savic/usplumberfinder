@@ -498,12 +498,7 @@ export default function PortalPosts({ initialPosts }) {
                         </svg>
                         {post.likes || 0}
                       </button>
-                      <span className="post-card-read-more">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        Click for details
-                      </span>
+                      <span className="post-card-read-more">Click for details →</span>
                     </div>
                   </div>
                 </div>
