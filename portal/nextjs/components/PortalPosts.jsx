@@ -460,13 +460,15 @@ export default function PortalPosts({ initialPosts }) {
                       )}
                     </div>
                     <div className="post-meta-right">
-                      <span className="post-views">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                          <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        {post.viewCount}
-                      </span>
+                      {post.viewCount > 0 && (
+                        <span className="post-views">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                          </svg>
+                          {post.viewCount}
+                        </span>
+                      )}
                       <span className="post-card-read-more">Click for details →</span>
                     </div>
                   </div>
