@@ -267,17 +267,20 @@ html { overflow-x: clip; }
 .post-card:hover .post-card-read-more { opacity: 1; }
 
 @media (max-width: 640px) {
-  .post-card-link { flex-direction: row; align-items: flex-start; }
+  .post-card-link { flex-direction: column; align-items: stretch; }
   .post-card::before { width: 100%; height: 4px; border-radius: 16px 16px 0 0; }
-  .post-card-img-wrap { width: 90px; min-width: 90px; aspect-ratio: 1/1; margin: 0.75rem 0 0.75rem 0.75rem; border-radius: 8px; flex-shrink: 0; }
-  .post-card-body { padding: 0.75rem 0.9rem 0.75rem 0.75rem; gap: 0.2rem; }
-  .post-card-title { font-size: 0.9rem; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+  .post-card-img-wrap { width: 100%; aspect-ratio: 16/7; margin: 0; border-radius: 0; }
+  .post-card-body { padding: 0.7rem 0.9rem 0.8rem; gap: 0.15rem; }
+  .post-company { font-size: 0.65rem; }
+  .post-card-title { font-size: 0.9rem; -webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
   .post-card-excerpt { display: none; }
-  .post-card-actions { flex-wrap: nowrap; gap: 0.3rem; }
+  .post-card-actions { margin-top: 0.3rem; }
   .post-card-action-btn { display: none; }
-  .post-card-meta { padding-top: 0.25rem; border-top: none; margin-top: 0; }
+  .post-card-meta { padding-top: 0.15rem; border-top: none; margin-top: 0; flex-direction: column; align-items: flex-start; gap: 0.1rem; }
+  .post-meta-left { order: -1; }
   .post-meta-right { display: none; }
-  .post-card-read-more { opacity: 1; font-size: 0.72rem; }
+  .post-city { font-size: 0.75rem; }
+  .post-card-read-more { opacity: 1; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.25rem; }
 }
 
 /* Pagination */
