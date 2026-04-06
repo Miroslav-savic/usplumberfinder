@@ -191,18 +191,26 @@ html { overflow-x: clip; }
   display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; flex: 1;
 }
 .post-card-call-btn {
-  display: inline-flex; align-items: center; gap: 0.45rem;
-  background: #f97316; color: #fff;
-  font-size: 0.8rem; font-weight: 700;
-  padding: 0.4rem 0.85rem; border-radius: 8px;
-  cursor: pointer; transition: background 0.15s, transform 0.1s;
-  flex-shrink: 0; white-space: nowrap; border: none;
-  box-shadow: 0 2px 6px rgba(249,115,22,0.35);
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: none; color: #f97316;
+  font-size: 0.85rem; font-weight: 600;
+  padding: 0; border: none; border-radius: 0;
+  cursor: pointer; transition: color 0.15s; flex-shrink: 0; white-space: nowrap;
 }
-.post-card-call-btn:hover { background: #ea580c; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(249,115,22,0.4); }
-.post-card-call-btn:active { transform: translateY(0); }
-.post-card-phone-num {
-  font-weight: 500; opacity: 0.88; font-size: 0.76rem;
+.post-card-call-btn:hover { color: #ea580c; }
+.post-card-call-btn .call-now-label { display: none; }
+.post-card-phone-num { font-weight: 600; font-size: 0.85rem; }
+
+@media (max-width: 640px) {
+  .post-card-call-btn {
+    background: #f97316; color: #fff;
+    padding: 0.38rem 0.8rem; border-radius: 8px;
+    font-size: 0.8rem; font-weight: 700;
+    box-shadow: 0 2px 6px rgba(249,115,22,0.35);
+  }
+  .post-card-call-btn:hover { background: #ea580c; }
+  .post-card-call-btn .call-now-label { display: inline; }
+  .post-card-phone-num { opacity: 0.88; font-size: 0.75rem; font-weight: 500; }
 }
 .post-card-details-hint {
   display: inline-flex; align-items: center; gap: 0.3rem;
