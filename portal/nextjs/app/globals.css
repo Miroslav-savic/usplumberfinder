@@ -275,9 +275,8 @@ html { overflow-x: clip; }
   .post-card-excerpt { display: none; }
   .post-card-actions { flex-wrap: nowrap; gap: 0.3rem; }
   .post-card-action-btn { display: none; }
-  .post-card-meta { padding-top: 0.4rem; border-top: none; flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-  .post-meta-right { display: none; }
-  .post-meta-left { flex-direction: column; gap: 0.2rem; }
+  .post-card-meta { display: none; }
+  .post-card-details-hint { display: none; }
   .post-card-read-more { opacity: 1; }
 }
 
