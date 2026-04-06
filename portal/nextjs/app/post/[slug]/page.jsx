@@ -203,7 +203,7 @@ export default async function PostDetailPage({ params }) {
 
         {related.length > 0 && (
           <div className="related-plumbers">
-            <h3 className="related-title">Related Clinics</h3>
+            <h3 className="related-title">Related Plumbers</h3>
             <div className="related-grid">
               {related.map(r => (
                 <Link key={r._id} href={`/post/${r.slug}`} className="related-card">
