@@ -222,18 +222,25 @@ export default function PortalPosts({ initialPosts }) {
     return () => clearInterval(t);
   }, []);
 
-  function handleCopy(e, phone, id) {
+  function gtrack(event, params) {
+    if (typeof window !== "undefined" && window.gtag)
+      window.gtag("event", event, { event_category: "engagement", ...params });
+  }
+
+  function handleCopy(e, phone, id, post) {
     e.preventDefault();
     e.stopPropagation();
     navigator.clipboard.writeText(phone).then(() => {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
+      gtrack("copy_phone", { event_label: post.companyName, plumber_name: post.companyName, plumber_city: extractCity(post.address) });
     });
   }
 
   function handleMapOpen(e, post) {
     e.preventDefault();
     e.stopPropagation();
+    gtrack("map_open", { event_label: post.companyName, plumber_name: post.companyName, plumber_city: extractCity(post.address) });
     setMapPost(post);
   }
 
@@ -293,7 +300,17 @@ export default function PortalPosts({ initialPosts }) {
   const currentPage = Math.min(page, totalPages);
   const paginated = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
-  function handleSearch(e) { setSearch(e.target.value); setPage(1); }
+  const searchTrackRef = useRef(null);
+  function handleSearch(e) {
+    const val = e.target.value;
+    setSearch(val); setPage(1);
+    clearTimeout(searchTrackRef.current);
+    if (val.trim().length >= 3) {
+      searchTrackRef.current = setTimeout(() => {
+        gtrack("search", { search_term: val.trim() });
+      }, 1000);
+    }
+  }
   function handleCity(e) { setCity(e.target.value); setPage(1); }
 
   const handleNearMe = useCallback((location = "search") => {
@@ -471,7 +488,7 @@ export default function PortalPosts({ initialPosts }) {
                       <div className="post-card-phone-row">
                         <span
                           className="post-card-call-btn"
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `tel:${post.phone}`; }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); gtrack("call_now_click", { event_category: "conversion", event_label: post.companyName, plumber_name: post.companyName, plumber_city: extractCity(post.address) }); window.location.href = `tel:${post.phone}`; }}
                         >
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -481,7 +498,7 @@ export default function PortalPosts({ initialPosts }) {
                         </span>
                         <button
                           className={`post-card-action-btn ${copiedId === post._id ? "post-card-action-btn--copied" : ""}`}
-                          onClick={(e) => handleCopy(e, post.phone, post._id)}
+                          onClick={(e) => handleCopy(e, post.phone, post._id, post)}
                           title="Copy phone number"
                         >
                           {copiedId === post._id ? (

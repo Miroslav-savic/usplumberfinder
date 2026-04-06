@@ -1,12 +1,12 @@
 "use client";
 
-function track(eventName, clinicName, city) {
+function track(eventName, plumberName, city) {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", eventName, {
       event_category: "conversion",
-      event_label: clinicName,
-      clinic_name: clinicName,
-      clinic_city: city || "",
+      event_label: plumberName,
+      plumber_name: plumberName,
+      plumber_city: city || "",
     });
   }
 }
