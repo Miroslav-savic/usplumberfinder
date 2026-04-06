@@ -12,7 +12,7 @@ const AddressMap = dynamic(() => import("@/components/AddressMap"), { ssr: false
 const ReviewSection = dynamic(() => import("@/components/ReviewSection"), { ssr: false });
 
 
-const SITE = "https://usclinicfinder.com";
+const SITE = "https://usplumberfinder.com";
 
 const DAY_NAMES = {
   mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday",
@@ -41,21 +41,28 @@ function toHHMM(time) {
   return `${String(h).padStart(2, "0")}:${min}`;
 }
 
+const SHORT_TO_LONG = {
+  sun:"Sunday",mon:"Monday",tue:"Tuesday",wed:"Wednesday",thu:"Thursday",fri:"Friday",sat:"Saturday"
+};
+
 function parseOpeningHours(hoursStr) {
   if (!hoursStr) return null;
-  const lines = hoursStr.split(/\n|;|,\s*(?=[A-Z][a-z]{2}:)/).map(s => s.trim()).filter(Boolean);
+  // 24/7: any day has "Open 24h"
+  if (hoursStr.includes("Open 24h")) {
+    const allDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    return [{ "@type": "OpeningHoursSpecification", dayOfWeek: allDays, opens: "00:00", closes: "23:59" }];
+  }
+  // Format: "Sun: 7:00AM–8:00PM, Mon: 7:00AM–8:00PM, ..."
+  const lines = hoursStr.split(/,\s*(?=[A-Z][a-z]{2}:)|\n|;/).map(s => s.trim()).filter(Boolean);
   const specs = [];
   for (const line of lines) {
-    // "Monday: 7:30 AM – 7:00 PM" or "Mon-Thu 7:30AM-7PM"
-    const m = line.match(/^([A-Za-z,\-\s]+?)[\s:]+(\d{1,2}(?::\d{2})?\s*(?:AM|PM)?)\s*[–\-to]+\s*(\d{1,2}(?::\d{2})?\s*(?:AM|PM)?)\s*$/i);
+    const m = line.match(/^([A-Za-z]{3}):\s*(\d{1,2}(?::\d{2})?(?:AM|PM))\s*[–\-]\s*(\d{1,2}(?::\d{2})?(?:AM|PM))$/i);
     if (!m) continue;
-    const dayPart = m[1].trim();
+    const day = SHORT_TO_LONG[m[1].toLowerCase()];
     const opens = toHHMM(m[2]);
     const closes = toHHMM(m[3]);
-    if (!opens || !closes) continue;
-    const days = dayPart.split(",").flatMap(chunk => expandDayRange(chunk.trim())).filter(Boolean);
-    if (!days.length) continue;
-    specs.push({ "@type": "OpeningHoursSpecification", dayOfWeek: days.length === 1 ? days[0] : days, opens, closes });
+    if (!day || !opens || !closes) continue;
+    specs.push({ "@type": "OpeningHoursSpecification", dayOfWeek: day, opens, closes });
   }
   return specs.length ? specs : null;
 }
@@ -83,7 +90,7 @@ export async function generateMetadata({ params }) {
   const image = post.imageUrl ? imgUrl(post.imageUrl) : `${SITE}/og-default.jpg`;
   const url = `${SITE}/post/${post.slug}`;
   const title = city ? `${post.companyName} ${city}` : post.companyName;
-  const keywords = [post.companyName, city, ...(post.specialties || []), "clinic", "medical center", "USA"].filter(Boolean).join(", ");
+  const keywords = [post.companyName, city, ...(post.specialties || []), "plumber", "plumbing", "USA"].filter(Boolean).join(", ");
 
   return {
     title,
@@ -91,7 +98,7 @@ export async function generateMetadata({ params }) {
     keywords,
     alternates: { canonical: url },
     openGraph: {
-      title, description, url, type: "article", locale: "en_US", siteName: "Clinic Finder",
+      title, description, url, type: "article", locale: "en_US", siteName: "US Plumber Finder",
       images: [{ url: image, width: 800, height: 600, alt: post.companyName }],
     },
     twitter: {
@@ -112,11 +119,14 @@ export default async function PostDetailPage({ params }) {
   const { street, state, postalCode } = parseAddress(post.address);
   const openingHours = parseOpeningHours(post.workingHours);
 
+  const plainDesc = (post.content ? post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200) : "")
+    || [post.companyName, post.address, (post.specialties || []).join(", ")].filter(Boolean).join(" · ").slice(0, 200);
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MedicalClinic",
+    "@type": "Plumber",
     name: post.companyName,
-    description: (post.content ? post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200) : "") || [post.companyName, post.address, (post.specialties || []).join(", ")].filter(Boolean).join(" · ").slice(0, 200),
+    description: plainDesc,
     url: `${SITE}/post/${post.slug}`,
     ...(post.website && { sameAs: post.website }),
     ...(post.imageUrl && { image: imgUrl(post.imageUrl) }),
@@ -134,14 +144,18 @@ export default async function PostDetailPage({ params }) {
       geo: { "@type": "GeoCoordinates", latitude: post.lat, longitude: post.lng },
     }),
     ...((post.specialties || []).length > 0 && {
-      medicalSpecialty: post.specialties,
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Plumbing Services",
+        itemListElement: post.specialties.map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
+      },
     }),
     ...(city && { areaServed: { "@type": "City", name: city } }),
     ...(openingHours && { openingHoursSpecification: openingHours }),
-    ...(post.reviewCount > 0 && {
+    ...(post.rating > 0 && {
       aggregateRating: {
         "@type": "AggregateRating",
-        ratingValue: post.rating?.toFixed(1),
+        ratingValue: post.rating.toFixed(1),
         reviewCount: post.reviewCount,
         bestRating: "5",
         worstRating: "1",
