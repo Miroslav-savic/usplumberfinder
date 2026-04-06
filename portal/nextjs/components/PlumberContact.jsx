@@ -16,7 +16,7 @@ function websiteHostname(url) {
   catch { return url.replace(/^https?:\/\/(www\.)?/, ""); }
 }
 
-export default function ClinicContact({ phone, email, website, workingHours, specialties, companyName, city }) {
+export default function PlumberContact({ phone, email, website, workingHours, specialties, companyName, city }) {
   const hasContact = phone || email || website || workingHours || (specialties || []).length > 0;
   if (!hasContact) return null;
 

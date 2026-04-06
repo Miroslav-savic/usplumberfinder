@@ -6,7 +6,7 @@ import ViewTracker from "@/components/ViewTracker";
 import PostGallery from "@/components/PostGallery";
 import Logo from "@/components/Logo";
 import { extractCity } from "@/lib/extractCity";
-import ClinicContact from "@/components/ClinicContact";
+import PlumberContact from "@/components/PlumberContact";
 
 const AddressMap = dynamic(() => import("@/components/AddressMap"), { ssr: false });
 const ReviewSection = dynamic(() => import("@/components/ReviewSection"), { ssr: false });
@@ -207,7 +207,7 @@ export default async function PostDetailPage({ params }) {
 
         {galleryUrls.length > 0 && <PostGallery images={galleryUrls} />}
 
-        <ClinicContact
+        <PlumberContact
           phone={post.phone}
           email={post.email}
           website={post.website}
