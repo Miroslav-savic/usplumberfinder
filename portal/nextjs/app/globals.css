@@ -558,6 +558,8 @@ html { overflow-x: clip; }
 .post-avail--allday .post-avail-dot,
 .post-avail--open   .post-avail-dot { background: #22c55e; box-shadow: 0 0 0 2px #bbf7d0; animation: avail-pulse 1.8s ease-in-out infinite; }
 .post-avail--closed .post-avail-dot { background: #cbd5e1; }
+.post-card--closed { opacity: 0.6; filter: grayscale(0.35); }
+.post-card--closed:hover { opacity: 0.8; filter: grayscale(0.15); transition: opacity 0.2s, filter 0.2s; }
 @keyframes avail-pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.4; }

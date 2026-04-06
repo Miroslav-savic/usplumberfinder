@@ -414,8 +414,9 @@ export default function PortalPosts({ initialPosts }) {
           const dist = userLocation && post.lat && post.lng
             ? haversine(userLocation.lat, userLocation.lng, post.lat, post.lng)
             : null;
+          const avail = getAvailability(post.workingHours, now);
           return (
-            <div key={post._id} className="post-card">
+            <div key={post._id} className={`post-card${avail?.type === "closed" ? " post-card--closed" : ""}`}>
               <a href={`/post/${post.slug || post._id}`} className="post-card-link">
                 <div className="post-card-img-wrap">
                   {post.imageUrl && (
@@ -473,12 +474,12 @@ export default function PortalPosts({ initialPosts }) {
                       </button>
                     ) : null}
                   </div>
-                  {(() => { const av = getAvailability(post.workingHours, now); return av ? (
-                    <div className={`post-avail post-avail--${av.type}`}>
+                  {avail && (
+                    <div className={`post-avail post-avail--${avail.type}`}>
                       <span className="post-avail-dot" />
-                      {av.label}
+                      {avail.label}
                     </div>
-                  ) : null; })()}
+                  )}
                   <div className="post-card-meta">
                     <div className="post-meta-left">
                       {extractCity(post.address) && (
