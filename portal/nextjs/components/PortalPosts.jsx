@@ -478,9 +478,22 @@ export default function PortalPosts({ initialPosts }) {
                   <p className="post-card-excerpt">
                     {(() => {
                       const city = extractCity(post.address);
-                      const specs = (post.specialties || []).join(", ");
-                      const rating = post.rating > 0 ? ` Rated ${post.rating.toFixed(1)}★ (${post.reviewCount} reviews).` : "";
-                      return `${post.companyName} offers ${specs || "plumbing services"} in ${city || "your area"}.${rating} Licensed & insured professionals, fast response times.`;
+                      const specs = post.specialties || [];
+                      const s1 = specs[0] || "plumbing";
+                      const s2 = specs[1];
+                      const r = post.rating > 0 ? post.rating.toFixed(1) : null;
+                      const rc = post.reviewCount;
+                      const is247 = post.workingHours && post.workingHours.includes("Open 24h");
+                      const idx = (post._id?.toString().charCodeAt(post._id.toString().length - 1) || 0) % 6;
+                      const templates = [
+                        `${post.companyName} specializes in ${s1}${s2 ? ` and ${s2}` : ""} in ${city}. ${r ? `Rated ${r}★ by ${rc} customers.` : "Licensed & insured."}`,
+                        `Looking for ${s1.toLowerCase()} in ${city}? ${post.companyName} is ${r ? `rated ${r}★ (${rc} reviews)` : "licensed & insured"} with fast response times.`,
+                        `${post.companyName} serves ${city} with ${specs.slice(0,3).join(", ") || "full plumbing services"}. ${is247 ? "Available 24/7 for emergencies." : r ? `${r}★ rated by ${rc} customers.` : "Upfront pricing, no hidden fees."}`,
+                        `${r ? `${r}★ rated` : "Licensed"} plumber in ${city}. ${post.companyName} covers ${s1}${s2 ? `, ${s2}` : ""}${specs[2] ? `, ${specs[2]}` : ""} and more. ${is247 ? "24/7 available." : "Fast response guaranteed."}`,
+                        `${post.companyName} provides ${s1.toLowerCase()} and related services across ${city}. ${r ? `${rc} customers gave them ${r} stars.` : "Fully licensed and insured professionals."}`,
+                        `Trusted ${s1.toLowerCase()} contractor in ${city}. ${post.companyName} ${r ? `has ${r}★ from ${rc} reviews` : "is licensed & insured"} — ${is247 ? "available 24/7." : "on-time, upfront pricing."}`,
+                      ];
+                      return templates[idx];
                     })()}
                   </p>
                   <div className="post-card-actions">
