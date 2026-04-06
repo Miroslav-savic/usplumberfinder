@@ -85,12 +85,20 @@ export async function generateMetadata({ params }) {
   if (!post) return {};
 
   const city = extractCity(post.address);
-  const plainText = post.content ? post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() : "";
-  const description = plainText.slice(0, 155) || [post.companyName, post.address, (post.specialties || []).join(", ")].filter(Boolean).join(" · ").slice(0, 155);
-  const image = post.imageUrl ? imgUrl(post.imageUrl) : `${SITE}/og-default.jpg`;
+  const { state } = parseAddress(post.address);
+  const specs = (post.specialties || []).slice(0, 3).join(", ");
+  const ratingStr = post.rating > 0 ? ` Rated ${post.rating.toFixed(1)}★ by ${post.reviewCount} customers.` : "";
+  const description = [
+    `${post.companyName} is a licensed plumber in ${[city, state].filter(Boolean).join(", ")}.`,
+    specs ? `Services: ${specs}.` : "",
+    ratingStr,
+  ].filter(Boolean).join(" ").slice(0, 155);
+  const image = post.imageUrl ? imgUrl(post.imageUrl) : null;
   const url = `${SITE}/post/${post.slug}`;
-  const title = city ? `${post.companyName} ${city}` : post.companyName;
-  const keywords = [post.companyName, city, ...(post.specialties || []), "plumber", "plumbing", "USA"].filter(Boolean).join(", ");
+  const title = city && state
+    ? `${post.companyName} – Plumber in ${city}, ${state}`
+    : post.companyName;
+  const keywords = [post.companyName, city, state, ...(post.specialties || []), "plumber", "plumbing service", "USA"].filter(Boolean).join(", ");
 
   return {
     title,
@@ -98,11 +106,11 @@ export async function generateMetadata({ params }) {
     keywords,
     alternates: { canonical: url },
     openGraph: {
-      title, description, url, type: "article", locale: "en_US", siteName: "US Plumber Finder",
-      images: [{ url: image, width: 800, height: 600, alt: post.companyName }],
+      title, description, url, type: "website", locale: "en_US", siteName: "US Plumber Finder",
+      ...(image && { images: [{ url: image, width: 800, height: 600, alt: post.companyName }] }),
     },
     twitter: {
-      card: "summary_large_image", title, description, images: [image],
+      card: "summary_large_image", title, description, ...(image && { images: [image] }),
     },
   };
 }
