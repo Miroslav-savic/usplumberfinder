@@ -105,11 +105,10 @@ function StarRating({ rating, count }) {
 }
 
 
-function getAvailability(workingHours) {
+function getAvailability(workingHours, now) {
   if (!workingHours) return null;
   if (workingHours.includes("Open 24h")) return { label: "24/7 Service", type: "allday" };
   const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const now = new Date();
   const dayName = days[now.getDay()];
   const match = workingHours.match(new RegExp(dayName + ":\\s*([\\d:]+(?:AM|PM))–([\\d:]+(?:AM|PM))"));
   if (!match) return null;
@@ -188,6 +187,11 @@ export default function PortalPosts({ initialPosts }) {
   const cachedLocRef = useRef(null);
   const [copiedId, setCopiedId] = useState(null);
   const [mapPost, setMapPost] = useState(null);
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(t);
+  }, []);
 
   function handleCopy(e, phone, id) {
     e.preventDefault();
@@ -469,7 +473,7 @@ export default function PortalPosts({ initialPosts }) {
                       </button>
                     ) : null}
                   </div>
-                  {(() => { const av = getAvailability(post.workingHours); return av ? (
+                  {(() => { const av = getAvailability(post.workingHours, now); return av ? (
                     <div className={`post-avail post-avail--${av.type}`}>
                       <span className="post-avail-dot" />
                       {av.label}
