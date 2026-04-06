@@ -105,22 +105,51 @@ function StarRating({ rating, count }) {
 }
 
 
-function getAvailability(workingHours, now) {
+const STATE_TZ = {
+  CT:"America/New_York",DE:"America/New_York",FL:"America/New_York",GA:"America/New_York",
+  IN:"America/New_York",KY:"America/New_York",ME:"America/New_York",MD:"America/New_York",
+  MA:"America/New_York",MI:"America/New_York",NH:"America/New_York",NJ:"America/New_York",
+  NY:"America/New_York",NC:"America/New_York",OH:"America/New_York",PA:"America/New_York",
+  RI:"America/New_York",SC:"America/New_York",TN:"America/New_York",VT:"America/New_York",
+  VA:"America/New_York",WV:"America/New_York",
+  AL:"America/Chicago",AR:"America/Chicago",IL:"America/Chicago",IA:"America/Chicago",
+  KS:"America/Chicago",LA:"America/Chicago",MN:"America/Chicago",MS:"America/Chicago",
+  MO:"America/Chicago",NE:"America/Chicago",ND:"America/Chicago",OK:"America/Chicago",
+  SD:"America/Chicago",TX:"America/Chicago",WI:"America/Chicago",
+  AZ:"America/Phoenix",MT:"America/Denver",CO:"America/Denver",ID:"America/Denver",
+  NM:"America/Denver",UT:"America/Denver",WY:"America/Denver",
+  CA:"America/Los_Angeles",NV:"America/Los_Angeles",OR:"America/Los_Angeles",WA:"America/Los_Angeles",
+  AK:"America/Anchorage",HI:"Pacific/Honolulu",
+};
+
+function getAddressState(address) {
+  if (!address) return null;
+  const m = address.match(/\b([A-Z]{2})\s*\d{5}/);
+  return m ? m[1] : null;
+}
+
+function getAvailability(workingHours, address) {
   if (!workingHours) return null;
   if (workingHours.includes("Open 24h")) return { label: "24/7 Service", type: "allday" };
+  const state = getAddressState(address);
+  const tz = (state && STATE_TZ[state]) || "America/New_York";
   const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const dayName = days[now.getDay()];
+  const localStr = new Date().toLocaleString("en-US", { timeZone: tz, weekday: "short", hour: "numeric", minute: "2-digit", hour12: false });
+  const dayName = localStr.split(",")[0].trim();
+  const timePart = localStr.split(",")[1]?.trim();
+  if (!timePart) return null;
+  const [h, m] = timePart.split(":").map(Number);
+  const cur = h * 60 + (m || 0);
   const match = workingHours.match(new RegExp(dayName + ":\\s*([\\d:]+(?:AM|PM))–([\\d:]+(?:AM|PM))"));
   if (!match) return null;
   function toMins(t) {
-    const [time, period] = [t.slice(0, -2), t.slice(-2)];
-    let [h, m] = time.split(":").map(Number);
-    if (!m) m = 0;
-    if (period === "PM" && h !== 12) h += 12;
-    if (period === "AM" && h === 12) h = 0;
-    return h * 60 + m;
+    const period = t.slice(-2);
+    let [hh, mm] = t.slice(0, -2).split(":").map(Number);
+    if (!mm) mm = 0;
+    if (period === "PM" && hh !== 12) hh += 12;
+    if (period === "AM" && hh === 12) hh = 0;
+    return hh * 60 + mm;
   }
-  const cur = now.getHours() * 60 + now.getMinutes();
   const open = toMins(match[1]);
   const close = toMins(match[2]);
   return cur >= open && cur < close
@@ -414,7 +443,7 @@ export default function PortalPosts({ initialPosts }) {
           const dist = userLocation && post.lat && post.lng
             ? haversine(userLocation.lat, userLocation.lng, post.lat, post.lng)
             : null;
-          const avail = getAvailability(post.workingHours, now);
+          const avail = getAvailability(post.workingHours, post.address);
           return (
             <div key={post._id} className={`post-card${avail?.type === "closed" ? " post-card--closed" : ""}`}>
               <a href={`/post/${post.slug || post._id}`} className="post-card-link">
