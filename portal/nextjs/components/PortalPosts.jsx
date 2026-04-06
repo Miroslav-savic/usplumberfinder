@@ -447,9 +447,6 @@ export default function PortalPosts({ initialPosts }) {
                   </div>
                   <div className="post-card-meta">
                     <div className="post-meta-left">
-                      {post.rating && (
-                        <StarRating rating={post.rating} count={post.reviewCount} />
-                      )}
                       {extractCity(post.address) && (
                         <span className="post-city">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -457,6 +454,9 @@ export default function PortalPosts({ initialPosts }) {
                           </svg>
                           {extractCity(post.address)}
                         </span>
+                      )}
+                      {post.rating && (
+                        <StarRating rating={post.rating} count={post.reviewCount} />
                       )}
                     </div>
                     <div className="post-meta-right">
