@@ -455,11 +455,11 @@ export default function PortalPosts({ initialPosts }) {
                           {extractCity(post.address)}
                         </span>
                       )}
-                    </div>
-                    <div className="post-meta-right">
                       {post.rating && (
                         <StarRating rating={post.rating} count={post.reviewCount} />
                       )}
+                    </div>
+                    <div className="post-meta-right">
                       {post.viewCount > 0 && (
                         <span className="post-views">
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
