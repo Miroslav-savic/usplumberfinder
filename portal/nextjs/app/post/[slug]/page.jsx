@@ -86,22 +86,27 @@ export async function generateMetadata({ params }) {
 
   const city = extractCity(post.address);
   const { state } = parseAddress(post.address);
+  const location = [city, state].filter(Boolean).join(", ");
   const specs = (post.specialties || []).slice(0, 3).join(", ");
-  const ratingStr = post.rating > 0 ? ` Rated ${post.rating.toFixed(1)}★ by ${post.reviewCount} customers.` : "";
-  const description = [
-    `${post.companyName} is a licensed plumber in ${[city, state].filter(Boolean).join(", ")}.`,
-    specs ? `Services: ${specs}.` : "",
-    ratingStr,
-  ].filter(Boolean).join(" ").slice(0, 155);
+
+  // Build description using real data, skipping missing fields
+  const parts = [];
+  if (location) parts.push(`${post.companyName} in ${location}`);
+  if (post.rating > 0) parts.push(`rated ${post.rating.toFixed(1)}★ by ${post.reviewCount} customers`);
+  const descParts = [parts.join(" — ")];
+  if (specs) descParts.push(`Services: ${specs}.`);
+  if (post.phone) descParts.push(`Call ${post.phone}.`);
+  const description = descParts.join(" ").slice(0, 155);
+
   const image = post.imageUrl ? imgUrl(post.imageUrl) : null;
   const url = `${SITE}/post/${post.slug}`;
-  const title = city && state
-    ? `${post.companyName} – Plumber in ${city}, ${state}`
-    : post.companyName;
+  const title = location
+    ? `${post.companyName} – ${location} | Reviews & Contact | Plumber Finder`
+    : `${post.companyName} | Reviews & Contact | Plumber Finder`;
   const keywords = [post.companyName, city, state, ...(post.specialties || []), "plumber", "plumbing service", "USA"].filter(Boolean).join(", ");
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     alternates: { canonical: url },
@@ -130,19 +135,35 @@ export default async function PostDetailPage({ params }) {
   const plainDesc = (post.content ? post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200) : "")
     || [post.companyName, post.address, (post.specialties || []).join(", ")].filter(Boolean).join(" · ").slice(0, 200);
 
+  const profileUrl = `${SITE}/post/${post.slug}`;
+
+  // ── BreadcrumbList JSON-LD (Task 10) ──
+  const citySlugStr = city ? city.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : null;
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+      ...(citySlugStr ? [{ "@type": "ListItem", position: 2, name: `Plumbers in ${city}`, item: `${SITE}/plumbers/${citySlugStr}` }] : []),
+      { "@type": "ListItem", position: citySlugStr ? 3 : 2, name: post.companyName, item: profileUrl },
+    ],
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Plumber",
     name: post.companyName,
     description: plainDesc,
-    url: `${SITE}/post/${post.slug}`,
-    ...(post.website && { sameAs: post.website }),
+    // Use the plumber's own website as canonical URL; fall back to profile page
+    url: post.website || profileUrl,
+    mainEntityOfPage: profileUrl,
+    ...(post.website && { sameAs: profileUrl }),
     ...(post.imageUrl && { image: imgUrl(post.imageUrl) }),
     ...(post.phone && { telephone: post.phone }),
     ...(post.email && { email: post.email }),
     address: {
       "@type": "PostalAddress",
-      streetAddress: street,
+      ...(street && { streetAddress: street }),
       addressLocality: city,
       ...(state && { addressRegion: state }),
       ...(postalCode && { postalCode }),
@@ -160,7 +181,7 @@ export default async function PostDetailPage({ params }) {
     }),
     ...(city && { areaServed: { "@type": "City", name: city } }),
     ...(openingHours && { openingHoursSpecification: openingHours }),
-    ...(post.rating > 0 && {
+    ...(post.rating > 0 && post.reviewCount > 0 && {
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: post.rating.toFixed(1),
@@ -174,6 +195,7 @@ export default async function PostDetailPage({ params }) {
   return (
     <div className="detail-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
       <nav className="detail-nav">
         <Link href="/" style={{ textDecoration: "none" }}><Logo size="sm" /></Link>
@@ -187,7 +209,7 @@ export default async function PostDetailPage({ params }) {
           <h1 className="detail-title">{post.title}</h1>
 
           <div className="detail-meta">
-            {post.viewCount > 0 && <span>{post.viewCount} views</span>}
+            {post.viewCount >= 100 && <span>{post.viewCount} views</span>}
             {post.reviewCount > 0 && (
               <>
                 <span>·</span>

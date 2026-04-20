@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const postRoutes = require("./routes/postRoutes");
+const blogRoutes = require("./routes/blogRoutes");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/blog",  blogRoutes);
 
 connectDB().then(() => {
   app.listen(port, () => {

@@ -9,12 +9,12 @@ import { extractCity } from "@/lib/extractCity";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Plumber Finder — Find Plumbers Near You",
-  description: "Search and find licensed plumbers, plumbing contractors, and emergency plumbing services near you across the United States.",
+  title: { absolute: "Find Trusted Plumbers Near You in the US | Plumber Finder" },
+  description: "Search and find licensed plumbers, plumbing contractors, and emergency plumbing services near you across the United States. Read reviews, compare services, and call direct.",
   keywords: "find plumbers near me, plumber USA, emergency plumber, drain cleaning, pipe repair, water heater, plumbing service near me",
   alternates: { canonical: "https://usplumberfinder.com" },
   openGraph: {
-    title: "Plumber Finder — Find Plumbers Near You",
+    title: "Find Trusted Plumbers Near You in the US | Plumber Finder",
     description: "Search and find licensed plumbers and plumbing services near you across the United States.",
     url: "https://usplumberfinder.com",
     type: "website",
@@ -23,7 +23,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Plumber Finder — Find Plumbers Near You",
+    title: "Find Trusted Plumbers Near You in the US | Plumber Finder",
     description: "Search and find licensed plumbers and plumbing services near you across the United States.",
   },
 };
@@ -102,6 +102,7 @@ export default async function PortalPage() {
       <nav className="portal-nav">
         <Link href="/" style={{ textDecoration: "none" }}><Logo size="md" /></Link>
         <div className="nav-links">
+          <Link href="/blog" className="nav-contact">Blog</Link>
           <Link href="/about" className="nav-contact">About</Link>
         </div>
       </nav>
@@ -145,6 +146,7 @@ export default async function PortalPage() {
             <span>© {new Date().getFullYear()} Plumber Finder. All rights reserved.</span>
           </div>
           <div className="footer-links">
+            <Link href="/blog" className="footer-contact">Blog</Link>
             <Link href="/about" className="footer-contact">About</Link>
             <Link href="/privacy" className="footer-contact">Privacy Policy</Link>
             <a href="mailto:business.smartdev@gmail.com" className="footer-contact">

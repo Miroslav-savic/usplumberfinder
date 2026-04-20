@@ -141,6 +141,27 @@ export async function deletePost(token, id) {
   return data;
 }
 
+// Blog — public
+export async function getBlogPosts({ page = 1, limit = 9, tag } = {}) {
+  const params = new URLSearchParams({ page, limit });
+  if (tag) params.set("tag", tag);
+  const res = await fetch(`${BASE}/blog/public?${params}`, { cache: "no-store" });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Failed");
+  return data;
+}
+
+export async function getBlogPost(slug) {
+  const res = await fetch(`${BASE}/blog/public/${encodeURIComponent(slug)}`, { cache: "no-store" });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Not found");
+  return data;
+}
+
+export async function incrementBlogView(id) {
+  await fetch(`${BASE}/blog/public/${id}/view`, { method: "PATCH" });
+}
+
 // Reviews
 export async function getReviews(postId) {
   const res = await fetch(`${BASE}/posts/public/${postId}/reviews`, { cache: "no-store" });
